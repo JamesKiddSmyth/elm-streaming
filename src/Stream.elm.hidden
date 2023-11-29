@@ -1,0 +1,38 @@
+port module Stream.hidden
+    exposing
+        ( StreamChunk
+        , StreamStop
+        , StreamDone
+        , StreamChunkDecoder
+        , StreamStopDecoder
+        , StreamDoneDecoder
+        )
+
+import Dict exposing (..)
+import Maybe.Extra
+
+
+type alias StreamChunnk =
+    { completion : String
+    }
+
+
+type alias StreamStop =
+    { stopReason: String
+    }
+
+
+type alias StreamDone =
+    { done: Boolean
+    }
+
+
+type alias StreamChunkDecoder msg =
+    StreamChunnk -> msg
+
+type alias StreamStopDecoder msg =
+    StreamStop -> msg
+
+type alias StreamDoneDecoder msg =
+    StreamDone -> msg
+
