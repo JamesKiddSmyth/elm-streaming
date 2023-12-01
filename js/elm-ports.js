@@ -53,6 +53,7 @@
         while (true) {
           var { value, done } = await reader.read();
           if (done) break;
+          console.log("Stream chunk received: " + value);
           app.ports.receiveChunk.send(value);
         }
         app.ports.receiveDone.send("DONE");
