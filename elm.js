@@ -5166,8 +5166,11 @@ var $author$project$HomePage$init = function (flags) {
 		{question: '', response: ''},
 		$elm$core$Platform$Cmd$none);
 };
-var $author$project$HomePage$Recv = function (a) {
-	return {$: 'Recv', a: a};
+var $author$project$HomePage$RecvChunk = function (a) {
+	return {$: 'RecvChunk', a: a};
+};
+var $author$project$HomePage$RecvDone = function (a) {
+	return {$: 'RecvDone', a: a};
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $elm$json$Json$Decode$string = _Json_decodeString;
@@ -5178,9 +5181,9 @@ var $author$project$HomePage$subscriptions = function (_v0) {
 	return $elm$core$Platform$Sub$batch(
 		_List_fromArray(
 			[
-				$author$project$HomePage$receiveChunk($author$project$HomePage$Recv),
-				$author$project$HomePage$receiveStop($author$project$HomePage$Recv),
-				$author$project$HomePage$receiveDone($author$project$HomePage$Recv)
+				$author$project$HomePage$receiveChunk($author$project$HomePage$RecvChunk),
+				$author$project$HomePage$receiveStop($author$project$HomePage$RecvChunk),
+				$author$project$HomePage$receiveDone($author$project$HomePage$RecvDone)
 			]));
 };
 var $elm$json$Json$Encode$string = _Json_wrap;
@@ -5201,7 +5204,7 @@ var $author$project$HomePage$update = F2(
 						model,
 						{question: '', response: model.response + ('<br>' + 'Answer: ')}),
 					$author$project$HomePage$sendMessage(model.question));
-			default:
+			case 'RecvChunk':
 				var chunk = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
@@ -5209,6 +5212,13 @@ var $author$project$HomePage$update = F2(
 						{
 							response: _Utils_ap(model.response, chunk)
 						}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				var s = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{response: model.response + ('<br>' + s)}),
 					$elm$core$Platform$Cmd$none);
 		}
 	});

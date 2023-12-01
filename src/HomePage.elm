@@ -55,7 +55,8 @@ init flags =
 type Msg
   = Send
   | QuestionChanged String
-  | Recv String
+  | RecvChunk String
+  | RecvDone String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -72,10 +73,17 @@ update msg model =
       , sendMessage model.question
       )
 
-    Recv chunk ->
+    RecvChunk chunk ->
       ( { model | response = model.response ++ chunk }
       , Cmd.none
       )
+      
+    RecvDone s ->
+      ( { model | response = model.response ++ "<br>" ++ s }
+      , Cmd.none 
+      -- sendMessage model.question <-- THIS works, so yes you can go port to port to port etc. 
+      )
+
 
 
 -- VIEW
@@ -114,8 +122,8 @@ viewResponse model =
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.batch
-        [  receiveChunk Recv
-        , receiveStop Recv
-        , receiveDone Recv
+        [  receiveChunk RecvChunk
+        , receiveStop RecvChunk
+        , receiveDone RecvDone
         ]
 
